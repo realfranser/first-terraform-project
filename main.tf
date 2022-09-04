@@ -75,27 +75,30 @@ resource "aws_security_group" "main-security-group" {
   description = "Allow inbound web traffic"
   vpc_id      = aws_vpc.main-vpc.id
 
+  # from - to = range of ports
   ingress {
-    description = "HTTPS"
-    # from - to = range of ports
-    from_port   = 433
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main-vpc.cidr_block]
+    description      = "HTTPS"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = [var.default_route]
+    ipv6_cidr_blocks = ["::/0"]
   }
   ingress {
-    description = "HTTP"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main-vpc.cidr_block]
+    description      = "HTTP"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = [var.default_route]
+    ipv6_cidr_blocks = ["::/0"]
   }
   ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main-vpc.cidr_block]
+    description      = "SSH"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = [var.default_route]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   egress {
@@ -138,7 +141,6 @@ resource "aws_eip" "main-elastic-ip" {
 
 # 9.- Create EC2 instance
 resource "aws_instance" "main-server" {
-  # ami								= var.amazon_linux_ami
   ami               = var.ubuntu_ami
   instance_type     = "t2.micro" # Free tier EC2 instance
   availability_zone = var.availability_zone
@@ -158,17 +160,6 @@ resource "aws_instance" "main-server" {
                 sudo systemctl start apache2
                 sudo bash -c 'echo your very first web server > /var/www/html/index.html'
                 EOF
-
-  # User data for Amazon Linux (not working)
-  #	user_data = <<-EOF
-  #								#!/bin/bash
-  #								sudo yum update -y
-  #								sudo yum install -y httpd.x86_64
-  #								sudo systemctl start httpd.service
-  #								sudo systemctl enable httpd.service
-  #
-  #								sudo bash -c 'echo WEB SERVER DEPLOYED! > /var/www/html/index.html'
-  #								EOF
 
   tags = {
     "Name" = "main server"

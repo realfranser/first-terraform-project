@@ -38,7 +38,7 @@ resource "aws_route_table" "main-route-table" {
   vpc_id = aws_vpc.main-vpc.id
 
   route {
-    cidr_block = "10.0.1.0/24"
+    cidr_block = var.default_route
     gateway_id = aws_internet_gateway.main-internet-gateway.id
   }
 
@@ -81,29 +81,30 @@ resource "aws_security_group" "main-security-group" {
     from_port   = 433
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [var.default_route]
+    cidr_blocks = [aws_vpc.main-vpc.cidr_block]
   }
   ingress {
     description = "HTTP"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [var.default_route]
+    cidr_blocks = [aws_vpc.main-vpc.cidr_block]
   }
   ingress {
     description = "SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.default_route]
+    cidr_blocks = [aws_vpc.main-vpc.cidr_block]
   }
 
   egress {
     from_port = 0
     to_port   = 0
     # all protocols allowed
-    protocol    = "-1"
-    cidr_blocks = [var.default_route]
+    protocol         = "-1"
+    cidr_blocks      = [var.default_route]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   tags = {
@@ -128,6 +129,7 @@ resource "aws_eip" "main-elastic-ip" {
   network_interface         = aws_network_interface.main-network-interface.id
   associate_with_private_ip = "10.0.1.50"
   depends_on                = [aws_internet_gateway.main-internet-gateway]
+  instance                  = aws_instance.main-server.id
 
   tags = {
     "Name" = "main elastic ip"
@@ -171,8 +173,4 @@ resource "aws_instance" "main-server" {
   tags = {
     "Name" = "main server"
   }
-}
-
-output "server_public_ip" {
-  value = aws_eip.main-elastic-ip
 }

@@ -5,4 +5,4 @@ tapply:
 	terraform apply -var-file="secret.tfvars" -auto-approve
 
 ssh:
-	ssh -i "secrets/main-key.pem" ec2-user@54.209.226.141
+	ssh -i "secrets/main-key.pem" ubuntu@54.173.70.168

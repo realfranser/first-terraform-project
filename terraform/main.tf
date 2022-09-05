@@ -61,6 +61,14 @@ resource "aws_security_group" "main-security-group" {
 
   # from - to = range of ports
   ingress {
+    description      = "Node service"
+    from_port        = 3000
+    to_port          = 3000
+    protocol         = "tcp"
+    cidr_blocks      = [var.default_route]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+  ingress {
     description      = "HTTPS"
     from_port        = 443
     to_port          = 443
@@ -125,7 +133,7 @@ resource "aws_eip" "main-elastic-ip" {
 
 # 9.- Create EC2 instance
 resource "aws_instance" "main-server" {
-  ami               = var.ubuntu_ami
+  ami               = var.amazon_linux_ami
   instance_type     = "t2.micro" # Free tier EC2 instance
   availability_zone = var.availability_zone
   key_name          = "main-key"
@@ -136,14 +144,7 @@ resource "aws_instance" "main-server" {
     network_interface_id = aws_network_interface.main-network-interface.id
   }
 
-  # User data for Ubuntu
-  user_data = <<-EOF
-                #!/bin/bash
-                sudo apt update -y
-                sudo apt install apache2 -y
-                sudo systemctl start apache2
-                sudo bash -c 'echo your very first web server > /var/www/html/index.html'
-                EOF
+  user_data = file(var.docker_install_path)
 
   tags = {
     "Name" = "main server"

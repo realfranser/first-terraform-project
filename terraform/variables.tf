@@ -41,3 +41,9 @@ variable "ubuntu_ami" {
   type        = string
   sensitive   = false
 }
+
+variable "docker_install_path" {
+  description = "Relative path to the docker_install.sh file"
+  type        = string
+  sensitive   = false
+}

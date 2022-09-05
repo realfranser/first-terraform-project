@@ -8,4 +8,4 @@ tdestroy:
 	terraform destroy -var-file="terraform/secret.tfvars" -auto-approve
 
 ssh:
-	ssh -i "secrets/main-key.pem" ubuntu@54.173.70.168
+	ssh -i "conf/secrets/main-key.pem" ubuntu@54.173.70.168

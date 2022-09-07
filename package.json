@@ -4,7 +4,9 @@
   "description": "Learning terraform with AWS and Docker",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec node_modules/.bin/babel-node src/index.js",
+    "build": "babel src -d dist"
   },
   "repository": {
     "type": "git",
@@ -19,5 +21,11 @@
   "dependencies": {
     "express": "^4.18.1"
   },
-  "type": "module"
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.0",
+    "@babel/node": "^7.18.10",
+    "@babel/preset-env": "^7.19.0",
+    "nodemon": "^2.0.19"
+  }
 }

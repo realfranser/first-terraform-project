@@ -1,0 +1,5 @@
+dist/
+.git/
+terraform/
+node_modules/
+conf/

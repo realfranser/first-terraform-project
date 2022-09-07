@@ -59,7 +59,7 @@ resource "aws_security_group" "main-security-group" {
   description = "Allow inbound web traffic"
   vpc_id      = aws_vpc.main-vpc.id
 
-  # from - to = range of ports
+  # TODO: update when nginx is automated
   ingress {
     description      = "Node service"
     from_port        = 3000

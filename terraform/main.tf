@@ -131,7 +131,21 @@ resource "aws_eip" "main-elastic-ip" {
   }
 }
 
-# 9.- Create EC2 instance
+# 9.- Create S3 bucket to store config files
+resource "aws_s3_bucket" "main-config-bucket" {
+  bucket = "main-config-bucket"
+
+  tags = {
+    "Name" = "main config bucket"
+  }
+}
+
+resource "aws_s3_bucket_acl" "main-config-bucket-acl" {
+  bucket = aws_s3_bucket.main-config-bucket.id
+  acl    = "private"
+}
+
+# 10.- Create EC2 instance
 resource "aws_instance" "main-server" {
   ami               = var.amazon_linux_ami
   instance_type     = "t2.micro" # Free tier EC2 instance

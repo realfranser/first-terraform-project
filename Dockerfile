@@ -16,5 +16,8 @@ COPY . .
 # Make port 3000 available to the world outside this container
 EXPOSE 3000
 
+# Compile with babel
+RUN yarn build
+
 # Run index.js when the container launches
-CMD ["node", "src/index.js"]
+CMD ["node", "dist/index.js"]

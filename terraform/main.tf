@@ -132,18 +132,6 @@ resource "aws_eip" "main-elastic-ip" {
 }
 
 # 9.- Create S3 bucket to store config files
-resource "aws_s3_bucket" "main-config-bucket" {
-  bucket = "main-config-bucket"
-
-  tags = {
-    "Name" = "main config bucket"
-  }
-}
-
-resource "aws_s3_bucket_acl" "main-config-bucket-acl" {
-  bucket = aws_s3_bucket.main-config-bucket.id
-  acl    = "private"
-}
 
 # 10.- Create EC2 instance
 resource "aws_instance" "main-server" {

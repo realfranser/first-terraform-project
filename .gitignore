@@ -16,3 +16,4 @@ override.tf.json
 .terraformrc
 terraform.rc
 secret.tfvars
+terraform/server_public_ip
